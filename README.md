@@ -4,7 +4,7 @@ Supported algorithms are:
 * Single link: Distance between two clustens is the shortest distance between a pair of elements from the two clusters.
 * Average link: Distance between two clusters is the average distance between each pair of elements from the two clusters.
 
-Each dot is represented by a pair of numbers <x,y>.<br />
+Each dot is represented by a pair of numbers \<x,y\>.<br />
 
 The program reads a collection of dots from a signel input.txt file. <br />
 First row contains the requested algorithm. The second row contains the requested number of clusters. Afterwards each row will contain a dot.<br />
