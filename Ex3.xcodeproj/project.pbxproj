@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		946B91CA1C399F0F00BA9B62 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 946B91C91C399F0F00BA9B62 /* main.cpp */; };
+		946B91D21C399F6E00BA9B62 /* README.md in Sources */ = {isa = PBXBuildFile; fileRef = 946B91D11C399F6E00BA9B62 /* README.md */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -25,6 +26,8 @@
 /* Begin PBXFileReference section */
 		946B91C61C399F0F00BA9B62 /* Ex3 */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = Ex3; sourceTree = BUILT_PRODUCTS_DIR; };
 		946B91C91C399F0F00BA9B62 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
+		946B91D01C399F6E00BA9B62 /* LICENSE */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
+		946B91D11C399F6E00BA9B62 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -41,6 +44,8 @@
 		946B91BD1C399F0E00BA9B62 = {
 			isa = PBXGroup;
 			children = (
+				946B91D01C399F6E00BA9B62 /* LICENSE */,
+				946B91D11C399F6E00BA9B62 /* README.md */,
 				946B91C81C399F0F00BA9B62 /* Ex3 */,
 				946B91C71C399F0F00BA9B62 /* Products */,
 			);
@@ -118,6 +123,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				946B91D21C399F6E00BA9B62 /* README.md in Sources */,
 				946B91CA1C399F0F00BA9B62 /* main.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
