@@ -62,7 +62,7 @@ std::vector<const Dot*> parse::Dots(const std::string &input) {
         string rawX = line.substr(0, seperator);
         string rawY = line.substr(seperator + 1);
         
-        int x, y;
+        float x, y;
         
         //Parse string to int
         istringstream(rawX) >> x;
@@ -147,5 +147,27 @@ size_t parse::ClusterSize(const std::string &input) {
     
     //None found
     throw std::runtime_error("The input does not contain cluster size.");
+    
+}
+
+std::string parse::Format(const std::vector<cluster::Cluster *> &clusters, const std::vector<const Dot *> &dots) {
+    
+    std::stringstream sstream;
+    
+    //Print the cluster to which each dot belongs
+    for (std::vector<const Dot*>::const_iterator dot = dots.begin() ; dot != dots.end() ; dot++)
+        for (std::vector<cluster::Cluster*>::const_iterator cluster = clusters.begin() ; cluster != clusters.end() ; cluster++) {
+            
+            //Check if the dot is in the current cluster and continue to next dot if so
+            if ((*cluster)->Contains(**dot)) {
+                
+                sstream << cluster - clusters.begin() + 1 << '\n';
+                break;
+                
+            }
+            
+        }
+    
+    return sstream.str();
     
 }

@@ -9,7 +9,6 @@
 #include "Cluster.hpp"
 #include "Dot.hpp"
 #include <stdexcept>
-#import <sstream>
 
 //Internal usage
 NAMESPACE_CLUSTER_BEGIN
@@ -23,31 +22,17 @@ NAMESPACE_CLUSTER_BEGIN
 std::vector<Cluster*> ClusterByIndividualDots(std::vector<const Dot *> dots);
 
 /**
- * Creates clusters by single linkage.
+ * Creates clusters by agglomeration with specified input method,
+ * must belong to Cluster class (until U2 upgrades to C++11 that allows lambdas...).
  *
- * @param size The number of clusters to create.
- * @param dots The input coordinates to cluster.
+ * @param size Number of clusters to be in output.
+ * @param dots The dots to cluster.
+ * @param distance_method The distance method to cluster by.
  * @return A vector containing the resulting clusters.
  */
-std::vector<Cluster*> ClusterBySingleLinkage(size_t size, std::vector<const Dot *> dots);
-
-/**
- * Creates clusters by average linkage.
- *
- * @param size The number of clusters to create.
- * @param dots The input coordinates to cluster.
- * @return A vector containing the resulting clusters.
- */
-std::vector<Cluster*> ClusterByAverageLinkage(size_t size, std::vector<const Dot *> dots);
-
-/**
- * Creates clusters by complete linkage.
- *
- * @param size The number of clusters to create.
- * @param dots The input coordinates to cluster.
- * @return A vector containing the resulting clusters.
- */
-std::vector<Cluster*> ClusterByCompleteLinkage(size_t size, std::vector<const Dot *> dots);
+std::vector<Cluster*> Agglomerate(size_t size,
+                                  std::vector<const Dot *> dots,
+                                  float(Cluster::*distance_method)(const Cluster &) const);
 
 NAMESPACE_CLUSTER_END
 
@@ -68,21 +53,24 @@ std::vector<cluster::Cluster*> cluster::ClusterByIndividualDots(std::vector<cons
     
 }
 
-std::vector<cluster::Cluster*> cluster::ClusterBySingleLinkage(size_t size, std::vector<const Dot *> dots) {
+std::vector<cluster::Cluster*> cluster::Agglomerate(size_t size,
+                                                    std::vector<const Dot *> dots,
+                                                    float (cluster::Cluster::*distance_method)(const cluster::Cluster &) const) {
+    
+    //Make each dot a cluster
+    std::vector<Cluster*> clusters = ClusterByIndividualDots(dots);
     
     /*
      * Start by finding the nearest pair of clusters in the current clustering.
      * Afterwards, merge the two clusters together, and iterate once more.
-     * Iteration will be complete after N-K steps where N is number of 
+     * Iteration will be complete after N-K steps where N is number of
      * dots and K is number of clusters.
      */
-    
-    std::vector<Cluster*> clusters = ClusterByIndividualDots(dots);
     
     //N-K repeats
     size_t repeats = dots.size() - size;
     
-    while (repeats) {
+    while (repeats--) {
         
         //Find the most similar pairs of clusters in the current clustering
         float min_distance = 0;
@@ -105,7 +93,7 @@ std::vector<cluster::Cluster*> cluster::ClusterBySingleLinkage(size_t size, std:
                 //If havnt found a cluster yet the following distance will be minimum
                 if (!found_minimum) {
                     
-                    min_distance = (*clusterA)->NearestNeighbourDistance(**clusterB);
+                    min_distance = ((*clusterA)->*distance_method)(**clusterB);
                     found_minimum = true;
                     lhs = *clusterA;
                     rhs = *clusterB;
@@ -114,7 +102,7 @@ std::vector<cluster::Cluster*> cluster::ClusterBySingleLinkage(size_t size, std:
                 else {
                     
                     //If the clusters have a smaller distance than previously, update variables
-                    float current_minimum_distance = (*clusterA)->NearestNeighbourDistance(**clusterB);
+                    float current_minimum_distance =((*clusterA)->*distance_method)(**clusterB);
                     if (current_minimum_distance < min_distance) {
                         
                         min_distance = current_minimum_distance;
@@ -135,32 +123,18 @@ std::vector<cluster::Cluster*> cluster::ClusterBySingleLinkage(size_t size, std:
         //Remove the previous cluster from memory
         clusters.erase(std::remove(clusters.begin(), clusters.end(), rhs), clusters.end());
         
-        --repeats;
-        
     }
     
     return clusters;
     
 }
 
-std::vector<cluster::Cluster*> cluster::ClusterByAverageLinkage(size_t size, std::vector<const Dot *> dots) {
-    
-    return std::vector<Cluster*>();
-    
-}
-
-std::vector<cluster::Cluster*> cluster::ClusterByCompleteLinkage(size_t size, std::vector<const Dot *> dots) {
-    
-    return std::vector<cluster::Cluster*>();
-    
-}
-
 std::vector<cluster::Cluster*> cluster::Create(cluster::ClusterType type, size_t size, std::vector<const Dot *> dots) {
     
     switch (type) {
-        case cluster::kClusterTypeSingleLink:   return cluster::ClusterBySingleLinkage(size, dots);
-        case cluster::kClusterTypeAverageLink:  return cluster::ClusterByAverageLinkage(size, dots);
-        case cluster::kClusterTypeFurthestLink: return cluster::ClusterByCompleteLinkage(size, dots);
+        case cluster::kClusterTypeSingleLink:   return Agglomerate(size, dots, &Cluster::NearestNeighbourDistance);
+        case cluster::kClusterTypeAverageLink:  return Agglomerate(size, dots, &Cluster::AverageNeighbourDistance);
+        case cluster::kClusterTypeFurthestLink: return Agglomerate(size, dots, &Cluster::FurthestNeighbourDistance);
     }
     
     throw std::runtime_error("An unknown cluster type was requested.");
@@ -201,28 +175,6 @@ void cluster::Sort(std::vector<cluster::Cluster *>& clusters, const std::vector<
 void cluster::RandomizeOrder(std::vector<cluster::Cluster *> &clusters) {
 
     std::random_shuffle(clusters.begin(), clusters.end());
-    
-}
-
-std::string cluster::Format(const std::vector<cluster::Cluster *> &clusters, const std::vector<const Dot *> &dots) {
-    
-    std::stringstream sstream;
-    
-    //Print the cluster to which each dot belongs
-    for (std::vector<const Dot*>::const_iterator dot = dots.begin() ; dot != dots.end() ; dot++)
-        for (std::vector<cluster::Cluster*>::const_iterator cluster = clusters.begin() ; cluster != clusters.end() ; cluster++) {
-            
-            //Check if the dot is in the current cluster and continue to next dot if so
-            if ((*cluster)->Contains(**dot)) {
-                
-                sstream << cluster - clusters.begin() + 1 << '\n';
-                break;
-                
-            }
-            
-        }
-    
-    return sstream.str();
     
 }
 
@@ -292,8 +244,34 @@ float cluster::Cluster::NearestNeighbourDistance(const cluster::Cluster &rhs) co
 }
 
 float cluster::Cluster::AverageNeighbourDistance(const cluster::Cluster &rhs) const {
+
+    /*
+     * The distance between any two clusters A and B is taken to be the average 
+     * of all distances between pairs of objects "x" in A and "y" in B
+     */
     
-    return 0;
+    float sum = 0;
+    
+    //Iterate over each dot and find the closest one in the input cluster
+    for (std::vector<const Dot*>::const_iterator dot = m_dots.begin() ;
+         dot != m_dots.end() ;
+         dot++) {
+        
+        for (std::vector<const Dot*>::const_iterator foreign_dot = rhs.m_dots.begin() ;
+             foreign_dot != rhs.m_dots.end() ;
+             foreign_dot++) {
+            
+            //Sum up all distances
+            sum += (*dot)->distance(**foreign_dot);
+            
+        }
+        
+    }
+    
+    //Average by division on number of edges computed
+    sum /= (m_dots.size() * rhs.m_dots.size());
+    
+    return sum;
     
 }
 
@@ -306,7 +284,27 @@ float cluster::Cluster::FurthestNeighbourDistance(const cluster::Cluster &rhs) c
      * Dmax(Ci, Cj) = max for every x in Ci, y in Cj so that || x - y ||^2.
      */
     
-    return 0;
+    float max_distance = 0;
+    
+    //Iterate over each dot and find the closest one in the input cluster
+    for (std::vector<const Dot*>::const_iterator dot = m_dots.begin() ;
+         dot != m_dots.end() ;
+         dot++) {
+        
+        for (std::vector<const Dot*>::const_iterator foreign_dot = rhs.m_dots.begin() ;
+             foreign_dot != rhs.m_dots.end() ;
+             foreign_dot++) {
+            
+            //Replace minimal distance if a smaller one is found
+            float distance = (*dot)->distance(**foreign_dot);
+            if (distance > max_distance)
+                max_distance = distance;
+            
+        }
+        
+    }
+    
+    return max_distance;
     
 }
 

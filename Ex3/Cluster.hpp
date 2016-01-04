@@ -52,15 +52,6 @@ void Sort(std::vector<cluster::Cluster*>& clusters, const std::vector<const Dot*
 void RandomizeOrder(std::vector<cluster::Cluster*>& clusters);
 
 /**
- * Creates a formatted string for output.
- *
- * @param clusters The clusters to index numbers to.
- * @param dots The dots which determine the output's content.
- * @return A string containing a formatted output as in instructions.
- */
-std::string Format(const std::vector<cluster::Cluster*>& clusters, const std::vector<const Dot*>& dots);
-
-/**
  * Represents a cluster, contains dots and can
  * calculate distances to other clusters via
  * different methods, and merge with other clusters.

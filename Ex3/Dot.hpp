@@ -22,7 +22,7 @@ public:
      * @param x The X coordinate.
      * @param y The Y coordiante.
      */
-    Dot(int x, int y);
+    Dot(float x, float y);
         
     /**
      * Checks if the dot is in the same location.
@@ -44,10 +44,10 @@ public:
 private:
     
     ///Stores the X coordinate
-    int m_x;
+    float m_x;
     
     ///Stores the Y coordinate
-    int m_y;
+    float m_y;
     
 };
 

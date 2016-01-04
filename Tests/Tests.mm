@@ -63,11 +63,11 @@ size_t parse_size_from_file(const std::string& input) {
 
 - (void)testClustering {
     
-    XCTAssertEqual(formatted_result("input.txt"), formatted_file_read("output.txt"));
+    XCTAssertEqual(formatted_result("input.txt"),  formatted_file_read("output.txt"));
     XCTAssertEqual(formatted_result("input2.txt"), formatted_file_read("output2.txt"));
     XCTAssertEqual(formatted_result("input3.txt"), formatted_file_read("output3.txt"));
     XCTAssertEqual(formatted_result("input4.txt"), formatted_file_read("output4.txt"));
-
+    
 }
 
 std::string formatted_result(const std::string& input) {
@@ -81,15 +81,13 @@ std::string formatted_result(const std::string& input) {
     std::vector<cluster::Cluster*> clusters = cluster::Create(parse::ClusterType(contents),
                                                               parse::ClusterSize(contents),
                                                               dots);
-    
-    cluster::RandomizeOrder(clusters);
-    
+        
     //Sort the results by clusters
     cluster::Sort(clusters, dots);
     
     //Print the cluster to which each dot belongs
     std::stringstream test;
-    test << cluster::Format(clusters, dots);
+    test << parse::Format(clusters, dots);
     
     //Conform by removing redundant characters
     std::string output = test.str();

@@ -13,7 +13,6 @@
 #include <vector>
 #include <string>
 #include "Cluster.hpp"
-class Dot;
 
 NAMESPACE_PARSE_BEGIN
 
@@ -41,6 +40,15 @@ cluster::ClusterType ClusterType(const std::string& input);
  * @return Specified size of cluster.
  */
 size_t ClusterSize(const std::string& input);
+
+/**
+ * Creates a formatted string for output.
+ *
+ * @param clusters The clusters to index numbers to.
+ * @param dots The dots which determine the output's content.
+ * @return A string containing a formatted output as in instructions.
+ */
+std::string Format(const std::vector<cluster::Cluster*>& clusters, const std::vector<const Dot*>& dots);
 
 NAMESPACE_PARSE_END
 #endif /* Parse_hpp */

@@ -3,6 +3,7 @@ This repository contains my solution for implementing Hierarchical clustering. <
 Supported algorithms are:
 * Single link: Distance between two clustens is the shortest distance between a pair of elements from the two clusters.
 * Average link: Distance between two clusters is the average distance between each pair of elements from the two clusters.
+* Complete link: Distance between two clusters is the maximum distance between each pair of elements from the two clusters.
 
 Each dot is represented by a pair of numbers \<x,y\>.<br />
 

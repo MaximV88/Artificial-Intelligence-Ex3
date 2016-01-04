@@ -9,7 +9,7 @@
 #include "Dot.hpp"
 #include <math.h>
 
-Dot::Dot(int x, int y) :
+Dot::Dot(float x, float y) :
 m_x(x),
 m_y(y)
 { }

@@ -7,16 +7,15 @@
 //
 
 #include <fstream>
-#include <iostream>
 #include "Parse.hpp"
 #include "Cluster.hpp"
 
 int main(int argc, const char * argv[]) {
 
-    //Read the file to seperate the contents of map and algorithm
+    //Read the file
     std::ifstream ifs("input.txt");
     
-    //Get the formatted map (reading from current location until end of file)
+    //Get contents to string
     std::string formattedInput((std::istreambuf_iterator<char>(ifs) ),
                                (std::istreambuf_iterator<char>()    ));
     
@@ -28,14 +27,14 @@ int main(int argc, const char * argv[]) {
                                                               parse::ClusterSize(formattedInput),
                                                               dots);
     
-    cluster::RandomizeOrder(clusters);
-    
     //Sort the results by clusters
     cluster::Sort(clusters, dots);
     
-    //Print the cluster to which each dot belongs
-    std::cout << cluster::Format(clusters, dots);
-    
+    //Print the clusters to a file
+    std::ofstream output("output11.txt");
+    output << parse::Format(clusters, dots);
+    output.close();
+
     return 0;
 
 }
