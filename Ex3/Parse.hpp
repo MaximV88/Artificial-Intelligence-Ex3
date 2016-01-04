@@ -23,7 +23,7 @@ NAMESPACE_PARSE_BEGIN
  * @param input The string to be parsed.
  * @return A vector of heap allocated dots.
  */
-std::vector<const Dot*> dots(const std::string& input);
+std::vector<const Dot*> Dots(const std::string& input);
 
 /**
  * Parses the ClusterType contained in the input string.
@@ -32,7 +32,7 @@ std::vector<const Dot*> dots(const std::string& input);
  * @param input The string to be parsed.
  * @return A CluserType enum.
  */
-ClusterType clusterType(const std::string& input);
+cluster::ClusterType ClusterType(const std::string& input);
 
 /**
  * Parses the specified cluster size from the input string.
@@ -40,7 +40,7 @@ ClusterType clusterType(const std::string& input);
  * @param input The string to be parsed.
  * @return Specified size of cluster.
  */
-size_t clusterSize(const std::string& input);
+size_t ClusterSize(const std::string& input);
 
 NAMESPACE_PARSE_END
 #endif /* Parse_hpp */

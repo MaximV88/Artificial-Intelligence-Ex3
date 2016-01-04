@@ -23,20 +23,23 @@ public:
      * @param y The Y coordiante.
      */
     Dot(int x, int y);
-    
+        
     /**
-     * Returns the X coordinate.
-     * 
-     * @return X coordinate.
-     */
-    int getX() const;
-    
-    /**
-     * Returns the Y coordinate.
+     * Checks if the dot is in the same location.
      *
-     * @return Y coordinate.
+     * @param dot A dot to compare to.
+     * @return True if in same location, false otherwise.
      */
-    int getY() const;
+    bool operator==(const Dot& dot) const;
+    
+    /**
+     * Returns the euclidian distance between the current
+     * and the input dots.
+     *
+     * @param dot The dot to find the distance to.
+     * @return The distance.
+     */
+    float distance(const Dot& dot) const;
     
 private:
     

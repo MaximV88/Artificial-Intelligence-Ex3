@@ -7,7 +7,9 @@
 //
 
 #include <fstream>
+#include <iostream>
 #include "Parse.hpp"
+#include "Cluster.hpp"
 
 int main(int argc, const char * argv[]) {
 
@@ -18,11 +20,22 @@ int main(int argc, const char * argv[]) {
     std::string formattedInput((std::istreambuf_iterator<char>(ifs) ),
                                (std::istreambuf_iterator<char>()    ));
     
-    std::vector<const Dot*> dots = parse::dots(formattedInput);
+    //The requested dots
+    std::vector<const Dot*> dots = parse::Dots(formattedInput);
     
-    ClusterType type = parse::clusterType(formattedInput);
+    //Create the clusters
+    std::vector<cluster::Cluster*> clusters = cluster::Create(parse::ClusterType(formattedInput),
+                                                              parse::ClusterSize(formattedInput),
+                                                              dots);
     
-    size_t cluster_size = parse::clusterSize(formattedInput);
+    cluster::RandomizeOrder(clusters);
+    
+    //Sort the results by clusters
+    cluster::Sort(clusters, dots);
+    
+    //Print the cluster to which each dot belongs
+    std::cout << cluster::Format(clusters, dots);
     
     return 0;
+
 }

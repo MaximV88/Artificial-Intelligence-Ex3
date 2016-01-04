@@ -7,12 +7,21 @@
 //
 
 #include "Dot.hpp"
+#include <math.h>
 
 Dot::Dot(int x, int y) :
 m_x(x),
 m_y(y)
 { }
 
-int Dot::getX() const { return m_x; }
+bool Dot::operator==(const Dot &dot) const {
+    
+    return (m_x == dot.m_x && m_y == dot.m_y);
+    
+}
 
-int Dot::getY() const { return m_y; }
+float Dot::distance(const Dot &dot) const {
+    
+    return sqrtf(powf(m_x - dot.m_x, 2) + powf(m_y - dot.m_y, 2));
+    
+}

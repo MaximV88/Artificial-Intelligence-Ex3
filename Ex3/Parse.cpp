@@ -33,7 +33,7 @@ NAMESPACE_PARSE_END
 using namespace parse;
 
 
-std::vector<const Dot*> parse::dots(const std::string &input) {
+std::vector<const Dot*> parse::Dots(const std::string &input) {
     
     using namespace std;
     
@@ -44,29 +44,24 @@ std::vector<const Dot*> parse::dots(const std::string &input) {
      */
     
     stringstream sstream(input);
+    
+    //Stores all of the found dots
+    std::vector<const Dot*> storage;
 
-    //Get starting position for parsing
     string line;
     while (std::getline(sstream, line)) {
         
         //Check if the line contains a ',' character that indicates its a coordinate
-        if (line.find(",") != std::string::npos)
-            break;
+        if (line.find(",") == std::string::npos)
+            continue;
         
-    }
-    
-    //Stores all of the found dots
-    std::vector<const Dot*> storage;
-    
-    while (std::getline(sstream, line)) {
-        
-        //Clean the line from escape character
+        //Clean the line from escape characters
         parse::purify(line);
         
         size_t seperator = line.find_first_of(",");
         string rawX = line.substr(0, seperator);
         string rawY = line.substr(seperator + 1);
-
+        
         int x, y;
         
         //Parse string to int
@@ -81,7 +76,7 @@ std::vector<const Dot*> parse::dots(const std::string &input) {
     
 }
 
-ClusterType parse::clusterType(const std::string &input) {
+cluster::ClusterType parse::ClusterType(const std::string &input) {
     
     using namespace std;
     
@@ -100,9 +95,9 @@ ClusterType parse::clusterType(const std::string &input) {
         parse::purify(line);
 
         if (line.find("single link") != std::string::npos)
-            return ClusterTypeSingleLink;
+            return cluster::kClusterTypeSingleLink;
         else if (line.find("average link") != std::string::npos)
-            return ClusterTypeAverageLink;
+            return cluster::kClusterTypeAverageLink;
         
     }
     
@@ -111,7 +106,7 @@ ClusterType parse::clusterType(const std::string &input) {
     
 }
 
-size_t parse::clusterSize(const std::string &input) {
+size_t parse::ClusterSize(const std::string &input) {
     
     using namespace std;
     
