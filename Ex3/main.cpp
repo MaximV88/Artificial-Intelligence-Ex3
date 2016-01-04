@@ -31,7 +31,7 @@ int main(int argc, const char * argv[]) {
     cluster::Sort(clusters, dots);
     
     //Print the clusters to a file
-    std::ofstream output("output11.txt");
+    std::ofstream output("output.txt");
     output << parse::Format(clusters, dots);
     output.close();
 
