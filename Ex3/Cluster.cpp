@@ -9,6 +9,7 @@
 #include "Cluster.hpp"
 #include "Dot.hpp"
 #include <stdexcept>
+#include <algorithm>
 
 //Internal usage
 NAMESPACE_CLUSTER_BEGIN

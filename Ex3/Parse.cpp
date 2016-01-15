@@ -12,6 +12,7 @@
 #include <iostream>
 #include <sstream>
 #include <stdexcept>
+#include <algorithm>
 
 //Internal functions
 NAMESPACE_PARSE_BEGIN
